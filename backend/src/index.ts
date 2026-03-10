@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import connectDB from '../src/config/db';
 //import authRoutes from "./routes/auth";
 //import profileRoutes from "./routes/profile";
 
@@ -18,3 +19,5 @@ app.use(express.json());
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+
+connectDB();
