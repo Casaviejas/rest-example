@@ -1,11 +1,21 @@
 import bcrypt from "bcryptjs";
-import { UserModel } from "../models/user-model";
-import { RegisterBody } from "../middlewares/validate.middleware";
+import jwt from "jsonwebtoken";
+import { User, UserModel } from "../models/user-model";
+import { RegisterBody, LoginBody } from "../middlewares/validate.middleware";
 
 export interface RegisterResult {
   id: string;
   name: string;
   email: string;
+}
+
+export interface LoginResult {
+  token: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+  };
 }
 
 export const registerUser = async (
@@ -38,5 +48,49 @@ export const registerUser = async (
     id: newUser._id.toString(),
     name: newUser.name,
     email: newUser.email,
+  };
+};
+
+export const loginUser = async (data: LoginBody): Promise<LoginResult> => {
+  const { email, password } = data;
+
+  //verificar que el usuario existe
+  const user = await UserModel.findOne({ email: email.toLowerCase() });
+
+  if (!user) {
+    const error = new Error("Credenciales incorrectas") as Error & {
+      statusCode: number;
+    };
+    error.statusCode = 401;
+    throw error;
+  }
+
+  //comparar contraseña con hash almacenado
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    const error = new Error("Credenciales incorrectas") as Error & {
+      statusCode: number;
+    };
+    error.statusCode = 401;
+    throw error;
+  }
+
+  //generar el token JWT
+  const jwtSecret = process.env.JWT_SECRET;
+
+  const token = jwt.sign(
+    { id: user._id.toString(), email: user.email },
+    jwtSecret as string,
+    { expiresIn: "2h" },
+  );
+
+  return {
+    token,
+    user: {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+    },
   };
 };

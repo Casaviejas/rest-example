@@ -6,6 +6,11 @@ export interface RegisterBody {
   password: string;
 }
 
+export interface LoginBody {
+  email: string;
+  password: string;
+}
+
 // Validaciones básicas sin librería externa
 export const validateRegister = (
   req: Request,
@@ -29,6 +34,30 @@ export const validateRegister = (
 
   if (errors.length > 0) {
     res.status(400).json({ message: "Datos inválidos", errors });
+    return;
+  }
+
+  next();
+};
+
+export const validateLogin = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
+  const { email, password } = req.body as LoginBody;
+  const errors: string[] = [];
+
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.push("El email no es valido");
+  }
+
+  if (!password || password.trim().length === 0) {
+    errors.push("La contraseña es requerida");
+  }
+
+  if (errors.length > 0) {
+    res.status(400).json({ message: "Datos invalidos", errors });
     return;
   }
 
