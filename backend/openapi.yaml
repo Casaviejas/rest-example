@@ -1,0 +1,116 @@
+openapi: 3.0.3
+info:
+  title: Profile API
+  description: API para gestionar el perfil del usuario autenticado
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000
+    description: Servidor local
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 65fa8d3c2e0c1a9b3e45d201
+        name:
+          type: string
+          example: Daniel Gomez
+        email:
+          type: string
+          example: daniel@email.com
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    UpdateProfileRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Daniel Gomez
+
+paths:
+
+  /profile/me:
+
+    get:
+      summary: Obtener perfil
+      description: Obtiene la información del usuario autenticado
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: Perfil del usuario
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+
+        "401":
+          description: Token inválido o faltante
+
+    put:
+      summary: Actualizar perfil
+      description: Actualiza los datos del perfil del usuario autenticado
+      security:
+        - bearerAuth: []
+
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProfileRequest"
+
+      responses:
+        "200":
+          description: Perfil actualizado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Perfil actualizado
+                  user:
+                    $ref: "#/components/schemas/User"
+
+        "401":
+          description: Token inválido
+
+    delete:
+      summary: Eliminar cuenta
+      description: Elimina permanentemente la cuenta del usuario autenticado
+      security:
+        - bearerAuth: []
+
+      responses:
+        "200":
+          description: Usuario eliminado
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Usuario eliminado
+
+        "401":
+          description: Token inválido
