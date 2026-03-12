@@ -36,9 +36,18 @@ app.use("/auth", authRoutes);
 app.use("/profile", profileRoutes);
 
 
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  console.log(`Swagger disponible en http://localhost:${PORT}/docs`);
+// Health check
+app.get("/health", (req, res) => {
+  res.status(200).json({ message: "Server is running" });
 });
 
-connectDB();
+// Iniciar conexión a BD
+connectDB().then(() => {
+  app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(`Swagger disponible en http://localhost:${PORT}/docs`);
+  });
+}).catch((error) => {
+  console.error("Error al conectar a MongoDB:", error);
+  process.exit(1);
+});

@@ -9,10 +9,17 @@ const connectDB = async ():Promise<void> => {
 
         if (!mongoURI) throw new Error('MongoURI is not defined');
 
-        await mongoose.connect(mongoURI);
-        console.log('Connected to MongoDB');
+        console.log("🔌 Intentando conectar a MongoDB...");
+        console.log("🔌 URL:", mongoURI.split('@')[1]); // Log solo la parte después de @
+        
+        await mongoose.connect(mongoURI, {
+            serverSelectionTimeoutMS: 5000,
+            socketTimeoutMS: 5000,
+        });
+        
+        console.log('✅ Conectado a MongoDB exitosamente');
     } catch (error) {
-        console.error('Could not connect to MongoDB', error);
+        console.error('❌ No se pudo conectar a MongoDB:', error);
         process.exit(1);
     }
 }

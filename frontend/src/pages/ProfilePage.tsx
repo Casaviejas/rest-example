@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { deleteProfile, getProfile, updateProfile } from "../services/api";
+import { deleteProfile, updateProfile } from "../services/api";
 import type { UserData, FormData } from "../types/schemas";
 import toast from "react-hot-toast";
 
