@@ -11,6 +11,7 @@ import { ProfileFooter } from "../modules/profile/ProfileFooter";
 export function Profile() {
   const [isOnline] = useState(true);
   const { state, actions } = useProfile();
+  const { isEditing } = state;
 
   if (state.isLoading) {
     return (
@@ -21,25 +22,24 @@ export function Profile() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-8">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8">
       {/* Connection status indicator */}
       <ConnectionStatus isOnline={isOnline} />
 
       {/* Main profile card */}
-      <WiiCard className="w-full max-w-2xl p-8">
-        
+      <WiiCard className="w-full max-w-2xl p-8 mb-8">
         {/* Avatar and header */}
         <ProfileHeader
           name={state.name}
           email={state.email}
-          isEditing={state.isEditing}
+          isEditing={isEditing}
         />
 
         {/* Profile form */}
         <ProfileForm state={state} actions={actions} />
 
         {/* Action buttons */}
-        <ProfileActions isEditing={state.isEditing} actions={actions} />
+        <ProfileActions isEditing={isEditing} actions={actions} />
       </WiiCard>
 
       {/* Footer */}

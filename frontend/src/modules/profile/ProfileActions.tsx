@@ -9,6 +9,8 @@ export function ProfileActions({
   isEditing: boolean;
   actions: any;
 }) {
+  if (isEditing) return null;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -20,7 +22,7 @@ export function ProfileActions({
         <WiiButton
           type="button"
           onClick={() => actions.setIsEditing(true)}
-          className="w-full flex flex-row items-center justify-center gap-2"
+          className="w-full flex flex-row cursor-pointer items-center justify-center gap-2"
         >
           <Edit3 size={20} />
           Editar perfil
@@ -32,7 +34,7 @@ export function ProfileActions({
           type="button"
           variant="secondary"
           onClick={actions.handleLogout}
-          className="flex-1 flex items-center justify-center gap-2"
+          className="flex-1 flex cursor-pointer items-center justify-center gap-2"
         >
           <LogOut size={20} />
           Cerrar sesión
@@ -42,7 +44,7 @@ export function ProfileActions({
           type="button"
           variant="danger"
           onClick={actions.handleDelete}
-          className="flex-1 flex items-center justify-center gap-2"
+          className="flex-1 flex cursor-pointer items-center justify-center gap-2"
         >
           <Trash2 size={20} />
           Eliminar cuenta

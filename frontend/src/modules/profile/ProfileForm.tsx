@@ -76,7 +76,7 @@ export const ProfileForm = ({
         >
           <WiiButton
             type="submit"
-            className="flex-1 flex items-center justify-center gap-2"
+            className="flex-1 flex cursor-pointer items-center justify-center gap-2"
             disabled={isSaving}
           >
             <Save size={20} />
@@ -86,7 +86,7 @@ export const ProfileForm = ({
             type="button"
             variant="secondary"
             onClick={() => setIsEditing(false)}
-            className="flex-1"
+            className="flex-1 cursor-pointer"
             disabled={isSaving}
           >
             Cancelar
