@@ -7,7 +7,7 @@ import { motion } from "motion/react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
-import { login } from "../../services/api";
+import { login } from "../../services/user";
 
 export const Form = () => {
   const navigate = useNavigate();

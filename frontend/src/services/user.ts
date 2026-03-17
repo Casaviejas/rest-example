@@ -1,13 +1,18 @@
 import type { UpdateProfileParams } from "../types/schemas";
+import { getToken, getAuthHeaders } from "./auth";
+import { API_URL } from "./config";
 
-export const API_URL = import.meta.env.VITE_API_URL;
-
-console.log(`🔗 API URL configurada: ${API_URL}`);
-
-export async function register(credentials: { name: string; email: string; password: string }) {
-  console.log("📝 [REGISTER] Iniciando registro con:", { name: credentials.name, email: credentials.email });
+export async function register(credentials: {
+  name: string;
+  email: string;
+  password: string;
+}) {
+  console.log("📝 [REGISTER] Iniciando registro con:", {
+    name: credentials.name,
+    email: credentials.email,
+  });
   console.log(`📝 [REGISTER] Enviando POST a: ${API_URL}/auth/register`);
-  
+
   try {
     const response = await fetch(`${API_URL}/auth/register`, {
       method: "POST",
@@ -17,11 +22,13 @@ export async function register(credentials: { name: string; email: string; passw
       body: JSON.stringify(credentials),
     });
 
-    console.log(`📝 [REGISTER] Respuesta recibida - Status: ${response.status} ${response.statusText}`);
-    
+    console.log(
+      `📝 [REGISTER] Respuesta recibida - Status: ${response.status} ${response.statusText}`,
+    );
+
     const data = await response.json();
     console.log("📝 [REGISTER] Datos recibidos:", data);
-    
+
     if (!response.ok) {
       console.error("❌ [REGISTER] Error en respuesta:", data.message);
       throw new Error(data.message || "Error en el registro");
@@ -43,7 +50,7 @@ export async function register(credentials: { name: string; email: string; passw
 export async function login(credentials: { email: string; password: string }) {
   console.log("🔐 [LOGIN] Iniciando login con:", { email: credentials.email });
   console.log(`🔐 [LOGIN] Enviando POST a: ${API_URL}/auth/login`);
-  
+
   try {
     const response = await fetch(`${API_URL}/auth/login`, {
       method: "POST",
@@ -53,11 +60,13 @@ export async function login(credentials: { email: string; password: string }) {
       body: JSON.stringify(credentials),
     });
 
-    console.log(`🔐 [LOGIN] Respuesta recibida - Status: ${response.status} ${response.statusText}`);
-    
+    console.log(
+      `🔐 [LOGIN] Respuesta recibida - Status: ${response.status} ${response.statusText}`,
+    );
+
     const data = await response.json();
     console.log("🔐 [LOGIN] Datos recibidos:", data);
-    
+
     if (!response.ok) {
       console.error("❌ [LOGIN] Error en respuesta:", data.message);
       throw new Error(data.message || "Error en el login");
@@ -98,11 +107,13 @@ export async function getProfile() {
       headers: getAuthHeaders(),
     });
 
-    console.log(`👤 [GET_PROFILE] Respuesta recibida - Status: ${response.status}`);
-    
+    console.log(
+      `👤 [GET_PROFILE] Respuesta recibida - Status: ${response.status}`,
+    );
+
     let data = await response.json();
     console.log("👤 [GET_PROFILE] Datos recibimos:", data);
-    
+
     return data;
   } catch (error) {
     console.error("❌ [GET_PROFILE] Error:", error);
@@ -128,11 +139,13 @@ export async function updateProfile(params: UpdateProfileParams) {
       body: JSON.stringify(params.userData),
     });
 
-    console.log(`📝 [UPDATE_PROFILE] Respuesta recibida - Status: ${response.status}`);
-    
+    console.log(
+      `📝 [UPDATE_PROFILE] Respuesta recibida - Status: ${response.status}`,
+    );
+
     let data = await response.json();
     console.log("📝 [UPDATE_PROFILE] Datos de respuesta:", data);
-    
+
     console.log("✅ [UPDATE_PROFILE] Perfil actualizado exitosamente!");
     return data;
   } catch (error) {
@@ -161,24 +174,14 @@ export async function deleteProfile() {
       body: JSON.stringify({ id: id }),
     });
 
-    console.log(`🗑️ [DELETE_PROFILE] Respuesta recibida - Status: ${response.status}`);
+    console.log(
+      `🗑️ [DELETE_PROFILE] Respuesta recibida - Status: ${response.status}`,
+    );
     console.log("✅ [DELETE_PROFILE] Perfil eliminado exitosamente!");
-    
+
     return response.ok;
   } catch (error) {
     console.error("❌ [DELETE_PROFILE] Error:", error);
     throw error;
   }
-}
-
-export function getToken(): string | null {
-  return localStorage.getItem("token");
-}
-
-export function getAuthHeaders() {
-  const token = getToken();
-  return {
-    Authorization: `Bearer ${token}`,
-    "Content-Type": "application/json",
-  };
 }

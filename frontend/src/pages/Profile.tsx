@@ -7,6 +7,7 @@ import { ProfileActions } from "../modules/profile/ProfileActions";
 import { Decorate } from "../modules/profile/Decorate";
 import { ConnectionStatus } from "../modules/profile/ConnectionStatus";
 import { ProfileFooter } from "../modules/profile/ProfileFooter";
+import { ProfileOrders } from "../modules/profile/ProfileOrders";
 
 export function Profile() {
   const [isOnline] = useState(true);
@@ -40,6 +41,9 @@ export function Profile() {
 
         {/* Action buttons */}
         <ProfileActions isEditing={isEditing} actions={actions} />
+
+        {/* Orders section (only when not editing) */}
+        {!isEditing && <ProfileOrders />}
       </WiiCard>
 
       {/* Footer */}

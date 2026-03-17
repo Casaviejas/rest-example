@@ -1,5 +1,5 @@
 import toast from "react-hot-toast";
-import { register } from "../../services/api";
+import { register } from "../../services/user";
 import { Mail, Lock, User } from "lucide-react";
 import { motion } from "motion/react";
 import { WiiButton } from "../../components/WiiButton";

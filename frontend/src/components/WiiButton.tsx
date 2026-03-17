@@ -20,7 +20,7 @@ export const WiiButton = forwardRef<HTMLButtonElement, WiiButtonProps>(
     return (
       <motion.button
         ref={ref as any}
-        className={`relative px-8 py-3 rounded-xl border-2 text-white font-semibold transition-all duration-300 overflow-hidden ${variantStyles[variant]} ${className}`}
+        className={`relative cursor-pointer px-8 py-3 rounded-xl border-2 text-white font-semibold transition-all duration-300 overflow-hidden ${variantStyles[variant]} ${className}`}
         style={{ fontFamily: "Inter, sans-serif" }}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}

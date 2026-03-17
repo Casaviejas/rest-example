@@ -6,7 +6,7 @@ import {
   getProfile,
   updateProfile,
   deleteProfile,
-} from "../../services/api";
+} from "../../services/user";
 
 export function useProfile() {
   const navigate = useNavigate();
