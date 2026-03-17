@@ -1,18 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router";
+import { createBrowserRouter } from "react-router";
+import { Login } from "../pages/Login";
+import { Register } from "../pages/Register";
+import { Profile } from "../pages/Profile";
+import { Layout } from "../components/Layout";
 
-import { ProfilePage } from "../pages/ProfilePage";
-import { LoginPage } from "../pages/LoginPage";
-import { RegisterPage } from "../pages/RegisterPage";
-
-export const Router = () => {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/profile-page" element={<ProfilePage />} />
-        <Route path="/" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </BrowserRouter>
-  );
-};
+export const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: Layout,
+    children: [
+      { index: true, Component: Login },
+      { path: "register", Component: Register },
+      { path: "profile", Component: Profile },
+    ],
+  },
+]);
