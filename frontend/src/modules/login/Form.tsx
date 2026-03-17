@@ -79,7 +79,7 @@ export const Form = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.7 }}
       >
-        <WiiButton type="submit" className="w-full" disabled={isLoading}>
+        <WiiButton type="submit" className="w-full items-center" disabled={isLoading}>
           {isLoading ? "Iniciando sesión..." : "Iniciar sesión"}
         </WiiButton>
       </motion.div>

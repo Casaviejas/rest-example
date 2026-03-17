@@ -26,7 +26,7 @@ export const WiiButton = forwardRef<HTMLButtonElement, WiiButtonProps>(
         whileTap={{ scale: 0.98 }}
         {...(props as any)}
       >
-        <span className="relative z-10">{children}</span>
+        {children}
         <motion.div
           className="absolute inset-0 bg-white opacity-0"
           whileHover={{ opacity: 0.1 }}
