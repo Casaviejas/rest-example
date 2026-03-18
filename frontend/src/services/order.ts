@@ -39,7 +39,12 @@ export async function createOrder(description: string) {
   return data;
 }
 
-export async function updateOrder(id: string, data: { description?: string; status?: string }) {
+export interface Order {
+  order_name?: string;
+  quantity?: number;
+}
+
+export async function updateOrder(id: string, data: Order) {
   const token = getToken();
   if (!token) {
     console.error("❌ [UPDATE_ORDER] No hay token");

@@ -8,8 +8,9 @@ import {
 
 export interface Order {
   _id: string;
-  description: string;
-  status: "pending" | "completed";
+  userID?: string;      
+  order_name: string;
+  quantity: number;
   createdAt: string;
 }
 
@@ -17,19 +18,18 @@ export function useOrders() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const mockOrders: Order[] = [
-      { _id: "1", description: "Pedido de ejemplo 1", status: "pending", createdAt: "2026-03-17T10:00:00Z" },
-      { _id: "2", description: "Pedido de ejemplo 2", status: "completed", createdAt: "2026-03-16T15:30:00Z" },
-      { _id: "3", description: "Pedido de ejemplo 3", status: "pending", createdAt: "2026-03-15T12:45:00Z" },
-    ];
+useEffect(() => {
+  const mockOrders: Order[] = [
+    { _id: "1", order_name: "Pedido de ejemplo 1", quantity: 2, createdAt: "2026-03-17T10:00:00Z" },
+    { _id: "2", order_name: "Pedido de ejemplo 2", quantity: 5, createdAt: "2026-03-16T15:30:00Z" },
+    { _id: "3", order_name: "Pedido de ejemplo 3", quantity: 1, createdAt: "2026-03-15T12:45:00Z" },
+  ];
 
-    // simulacion de delay
-    setTimeout(() => {
-      setOrders(mockOrders);
-      setLoading(false);
-    }, 500);
-  }, []);
+  setTimeout(() => {
+    setOrders(mockOrders);
+    setLoading(false);
+  }, 500);
+}, []);
 
   const fetchOrders = async () => {
     setLoading(true);
@@ -47,20 +47,20 @@ export function useOrders() {
 //     console.log("✅ [ADD_ORDER] Pedido agregado:", order);
 //   };
 
-  const addOrder = async (description: string) => {
-    const newOrder: Order = {
-      _id: (Math.random() * 1000000).toFixed(0),
-      description,
-      status: "pending",
-      createdAt: new Date().toISOString(),
-    };
-    setOrders((prev) => [...prev, newOrder]);
-    console.log("✅ [ADD_ORDER] Pedido agregado:", newOrder);
+const addOrder = async (order_name: string, quantity: number) => {
+  const newOrder: Order = {
+    _id: (Math.random() * 1000000).toFixed(0),
+    order_name,
+    quantity,
+    createdAt: new Date().toISOString(),
   };
+  setOrders((prev) => [...prev, newOrder]);
+  console.log("✅ [ADD_ORDER] Pedido agregado:", newOrder);
+};
 
   const editOrder = async (
     id: string,
-    data: { description?: string; status?: string },
+    data: { order_name?: string; quantity?: number },
   ) => {
     const updated = await updateOrder(id, data);
     setOrders((prev) => prev.map((o) => (o._id === id ? updated : o)));
