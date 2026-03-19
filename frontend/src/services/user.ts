@@ -1,6 +1,6 @@
-import type { UpdateProfileParams } from "../types/schemas";
+import type { ProfileResponse, UpdateProfileParams } from "../types/schemas";
 import { getToken, getAuthHeaders } from "./auth";
-import { API_URL } from "./config";
+import { API_URL_AGGREGATOR, API_URL_USER } from "./config";
 
 export async function register(credentials: {
   name: string;
@@ -11,10 +11,10 @@ export async function register(credentials: {
     name: credentials.name,
     email: credentials.email,
   });
-  console.log(`📝 [REGISTER] Enviando POST a: ${API_URL}/auth/register`);
+  console.log(`📝 [REGISTER] Enviando POST a: ${API_URL_USER}/auth/register`);
 
   try {
-    const response = await fetch(`${API_URL}/auth/register`, {
+    const response = await fetch(`${API_URL_USER}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -49,10 +49,10 @@ export async function register(credentials: {
 
 export async function login(credentials: { email: string; password: string }) {
   console.log("🔐 [LOGIN] Iniciando login con:", { email: credentials.email });
-  console.log(`🔐 [LOGIN] Enviando POST a: ${API_URL}/auth/login`);
+  console.log(`🔐 [LOGIN] Enviando POST a: ${API_URL_USER}/auth/login`);
 
   try {
-    const response = await fetch(`${API_URL}/auth/login`, {
+    const response = await fetch(`${API_URL_USER}/auth/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -85,6 +85,7 @@ export async function login(credentials: { email: string; password: string }) {
   }
 }
 
+
 export async function logout() {
   console.log("🚪 [LOGOUT] Cerrando sesión...");
   localStorage.removeItem("token");
@@ -99,10 +100,10 @@ export async function getProfile() {
   }
 
   console.log("👤 [GET_PROFILE] Obteniendo perfil");
-  console.log(`👤 [GET_PROFILE] Enviando GET a: ${API_URL}/profile/me`);
+  console.log(`👤 [GET_PROFILE] Enviando GET a: ${API_URL_AGGREGATOR}/profile/me`);
 
   try {
-    let response = await fetch(`${API_URL}/profile/me`, {
+    let response = await fetch(`${API_URL_AGGREGATOR}/profile`, {
       method: "GET",
       headers: getAuthHeaders(),
     });
@@ -111,8 +112,9 @@ export async function getProfile() {
       `👤 [GET_PROFILE] Respuesta recibida - Status: ${response.status}`,
     );
 
-    let data = await response.json();
-    console.log("👤 [GET_PROFILE] Datos recibimos:", data);
+    let data: ProfileResponse = await response.json();
+    console.log("👤 [GET_PROFILE] User:", data.user);
+    console.log("👤 [GET_PROFILE] Orders:", data.orders);
 
     return data;
   } catch (error) {
@@ -130,10 +132,10 @@ export async function updateProfile(params: UpdateProfileParams) {
   }
 
   console.log("📝 [UPDATE_PROFILE] Actualizando perfil con:", params.userData);
-  console.log(`📝 [UPDATE_PROFILE] Enviando PUT a: ${API_URL}/profile/me`);
+  console.log(`📝 [UPDATE_PROFILE] Enviando PUT a: ${API_URL_USER}/profile/me`);
 
   try {
-    let response = await fetch(`${API_URL}/profile/me`, {
+    let response = await fetch(`${API_URL_USER}/profile/me`, {
       method: "PUT",
       headers: getAuthHeaders(),
       body: JSON.stringify(params.userData),
@@ -162,13 +164,13 @@ export async function deleteProfile() {
   }
 
   console.log("🗑️ [DELETE_PROFILE] Eliminando perfil");
-  console.log(`🗑️ [DELETE_PROFILE] Enviando DELETE a: ${API_URL}/profile/me`);
+  console.log(`🗑️ [DELETE_PROFILE] Enviando DELETE a: ${API_URL_USER}/profile/me`);
 
   try {
-    let id = await getProfile().then((profile) => profile.id);
+    let id = await getProfile().then((profile) => profile.user.id);
     console.log(`🗑️ [DELETE_PROFILE] ID del usuario a eliminar: ${id}`);
 
-    let response = await fetch(`${API_URL}/profile/me`, {
+    let response = await fetch(`${API_URL_USER}/profile/me`, {
       method: "DELETE",
       headers: getAuthHeaders(),
       body: JSON.stringify({ id: id }),

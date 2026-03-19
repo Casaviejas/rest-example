@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { WiiCard } from "../components/WiiCard";
-import { useProfile } from "../modules/profile/useProfile";
+import { useProfileWithOrders } from "../modules/profile/useProfileWithOrders";
 import { ProfileHeader } from "../modules/profile/ProfileHeader";
 import { ProfileForm } from "../modules/profile/ProfileForm";
 import { ProfileActions } from "../modules/profile/ProfileActions";
@@ -11,7 +11,7 @@ import { ProfileOrders } from "../modules/profile/ProfileOrders";
 
 export function Profile() {
   const [isOnline] = useState(true);
-  const { state, actions } = useProfile();
+  const { state, actions } = useProfileWithOrders();
   const { isEditing } = state;
 
   if (state.isLoading) {
@@ -43,7 +43,7 @@ export function Profile() {
         <ProfileActions isEditing={isEditing} actions={actions} />
 
         {/* Orders section (only when not editing) */}
-        {!isEditing && <ProfileOrders />}
+        {!isEditing && <ProfileOrders state={state} actions={actions} />}
       </WiiCard>
 
       {/* Footer */}

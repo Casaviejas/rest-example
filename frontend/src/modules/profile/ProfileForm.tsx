@@ -2,13 +2,14 @@ import { User, Mail, Lock, Save } from "lucide-react";
 import { WiiInput } from "../../components/WiiInput";
 import { WiiButton } from "../../components/WiiButton";
 import { motion } from "motion/react";
+import type { ProfileActions, ProfileState } from "../../types/schemas";
 
 export const ProfileForm = ({
   state,
   actions,
 }: {
-  state: any;
-  actions: any;
+  state: ProfileState;
+  actions: ProfileActions;
 }) => {
   const { name, email, password, isEditing, isSaving } = state;
   const { setName, setEmail, setPassword, handleUpdate, setIsEditing } =

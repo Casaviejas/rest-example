@@ -1,20 +1,24 @@
 import { useState } from "react";
 import { WiiCard } from "../../components/WiiCard";
 import { WiiButton } from "../../components/WiiButton";
-import { useOrders } from "./useOrders";
 import { Edit3, Trash2 } from "lucide-react";
+import type { Order, ProfileActions, ProfileState } from "../../types/schemas";
 
-export function ProfileOrders() {
-  const { status, actions } = useOrders();
-
+export function ProfileOrders({
+  state,
+  actions,
+}: {
+  state: ProfileState;
+  actions: ProfileActions;
+}) {
   const [newName, setNewName] = useState("");
   const [newQty, setNewQty] = useState(1);
 
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<number | null>(null);
   const [editingName, setEditingName] = useState("");
   const [editingQty, setEditingQty] = useState(1);
 
-  if (status.loading) return <p className="text-white">Cargando pedidos...</p>;
+  if (state.isLoading) return <p className="text-white">Cargando pedidos...</p>;
 
   return (
     <WiiCard className="w-full mt-6 p-4">
@@ -22,7 +26,7 @@ export function ProfileOrders() {
 
       {/* Lista de pedidos */}
       <div className="space-y-2">
-        {status.orders.map((o) => (
+        {state.orders.map((o: Order) => (
           <div
             key={o._id}
             className="flex justify-between items-center text-white bg-[#1F1F2A] p-2 rounded"
@@ -54,8 +58,8 @@ export function ProfileOrders() {
                   <WiiButton
                     onClick={async () => {
                       await actions.editOrder(o._id, {
-                        order_name: editingName,
-                        quantity: editingQty,
+                        product: editingName,
+                        price: editingQty,
                       });
                       setEditingId(null);
                     }}
